@@ -1003,14 +1003,35 @@ public class VehicleAccessService extends Service {
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, launchIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                Intent unlockIntent = new Intent(this, VehicleAccessService.class);
+        unlockIntent.putExtra(EXTRA_COMMAND, COMMAND_UNLOCK);
+        PendingIntent unlockPendingIntent = PendingIntent.getService(
+                this,
+                1001,
+                unlockIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Intent lockIntent = new Intent(this, VehicleAccessService.class);
+        lockIntent.putExtra(EXTRA_COMMAND, COMMAND_LOCK);
+        PendingIntent lockPendingIntent = PendingIntent.getService(
+                this,
+                1002,
+                lockIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
         return new Notification.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(getString(R.string.notification_title))
                 .setContentText(text)
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
+                .addAction(0, "열림", unlockPendingIntent)
+                .addAction(0, "닫힘", lockPendingIntent)
                 .build();
-    }
+
+
 
     private void updateNotification(String text) {
         long now = System.currentTimeMillis();
