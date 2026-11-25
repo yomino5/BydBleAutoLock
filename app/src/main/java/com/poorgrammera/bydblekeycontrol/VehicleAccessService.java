@@ -1030,6 +1030,7 @@ public class VehicleAccessService extends Service {
                 .addAction(0, "열림", unlockPendingIntent)
                 .addAction(0, "닫힘", lockPendingIntent)
                 .build();
+    }
 
 
 
